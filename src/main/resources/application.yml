@@ -1,0 +1,24 @@
+micronaut:
+  application:
+    name: todoHexagEngine
+  server:
+    cors:
+      enabled: true
+    port: 8082
+endpoints:
+  health:
+    enabled: true
+nats.addresses:
+  nats://localhost:4222
+cassandra:
+  default:
+    advanced:
+       metadata:
+        schema:
+          enabled: false
+    basic:
+      contact-points:
+         - "127.17.0.2:9042"
+      port: 9042
+      load-balancing-policy:
+        local-datacenter: datacenter1
