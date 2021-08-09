@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 
 @Singleton
-class TodoRepositoryImpl(private val cqlSession: CqlSession): TodoRepositoryPort {
+class TodoRepositoryImpl(private val cqlSession: CqlSession) : TodoRepositoryPort {
 
     override fun getCql(): List<TodoEntity> {
         val all = cqlSession.execute(SimpleStatement.newInstance("SELECT*FROM todo.Todo"))
@@ -25,18 +25,20 @@ class TodoRepositoryImpl(private val cqlSession: CqlSession): TodoRepositoryPort
     }
 
     override fun getByIdCql(id: UUID): TodoEntity {
-        val result = cqlSession.execute(SimpleStatement
-            .newInstance(
-                "SELECT * FROM todo WHERE id=?",
-                id
-            ))
-        return result.map { it ->
-            TodoEntity(
-                it.getUuid("id")!!,
-                it.getString("date")!!,
-                it.getString("description")!!,
-                it.getBoolean("done")!!
-            )
-        }.single()
+        val result = cqlSession.execute(
+            SimpleStatement
+                .newInstance(
+                    "SELECT * FROM todo WHERE id=?",
+                    id
+                )
+        ).one()
+
+        return TodoEntity(
+            result?.getUuid("id"),
+            result?.getString("date"),
+            result?.getString("description"),
+            result?.getBoolean("done")!!
+        )
     }
+
 }
