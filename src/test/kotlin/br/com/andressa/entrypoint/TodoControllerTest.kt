@@ -27,7 +27,7 @@ class TodoControllerTest: AnnotationSpec() {
     }
 
     @Test
-    fun `getAll`(){
+    fun `recebendo requisição de busca getAll`(){
         every { port.getAll() } answers {listTodo}
         val listRequest = listTodo.map { TodoConverter.todoToTodoRequest(it) }
         val result = controller.getAll()
@@ -40,7 +40,7 @@ class TodoControllerTest: AnnotationSpec() {
     }
 
     @Test
-    fun `getById`(){
+    fun `recebendo requisição de busca getById`(){
         every { port.getById(any()) } answers {todo}
         val todoEntity = TodoConverter.todoToTodoRequest(todo)
         val result = controller.getById(todo.id!!)
